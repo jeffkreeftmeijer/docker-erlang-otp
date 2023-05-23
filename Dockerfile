@@ -33,9 +33,9 @@ RUN set -xe \
 	  && make -j$(nproc) \
 	  && make -j$(nproc) docs DOC_TARGETS=chunks \
 	  && make install install-docs DOC_TARGETS=chunks ) \
-	&& find /usr/local -name examples | xargs rm -rf \
-	&& apt-get purge -y --auto-remove $buildDeps \
-	&& rm -rf $ERL_TOP /var/lib/apt/lists/*
+	&& (cd $ERL_TOP/erts/emulator && make debug) \
+	&& (cd $ERL_TOP/erts/emulator && make asan) \
+	&& (cd $ERL_TOP/erts/emulator && make valgrind)
 
 CMD ["erl"]
 
